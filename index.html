@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        li:hover {
+            background: #eaeaea;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guess Their Answer (All Levels)</h1>
+        <input type="text" id="search" placeholder="Search questions...">
+        <ul id="question-list"></ul>
+    </div>
+
+    <script>
+        fetch('questions_with_answers.json')
+            .then(response => response.json())
+            .then(questions => {
+                localStorage.setItem('questions', JSON.stringify(questions));
+                displayQuestions(questions);
+            })
+            .catch(error => console.error('Error loading questions:', error));
+
+        const questionList = document.getElementById('question-list');
+        const searchInput = document.getElementById('search');
+
+        function displayQuestions(questions) {
+            questionList.innerHTML = '';
+            Object.keys(questions).forEach(question => {
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `answer.html?question=${encodeURIComponent(question)}`;
+                link.textContent = question;
+                li.appendChild(link);
+                questionList.appendChild(li);
+            });
+        }
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const questions = JSON.parse(localStorage.getItem('questions')) || {};
+            const filteredQuestions = Object.keys(questions).filter(q => q.toLowerCase().includes(searchTerm));
+            questionList.innerHTML = '';
+            filteredQuestions.forEach(question => {
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `answer.html?question=${encodeURIComponent(question)}`;
+                link.textContent = question;
+                li.appendChild(link);
+                questionList.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>

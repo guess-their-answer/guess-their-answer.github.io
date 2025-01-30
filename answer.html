@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        a {
+            display: block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="question-title">Question</h1>
+        <ul id="answer-list"></ul>
+        <a href="index.html">Back to Questions</a>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const question = params.get('question');
+      const questions = JSON.parse(localStorage.getItem('questions')) || {};
+
+      document.getElementById('question-title').textContent = question;
+
+      const answerList = document.getElementById('answer-list');
+
+      if (questions[question]) {
+          questions[question].forEach((answer, index) => {
+              const li = document.createElement('li');
+              li.textContent = answer;
+
+              // Highlight the first item with a star
+              if (index === 0) {
+                  li.textContent = `★ ${answer}`;
+              }
+
+              answerList.appendChild(li);
+          });
+      } else {
+          answerList.innerHTML = '<li>No answers found.</li>';
+      }
+  </script>
+</body>
+</html>
