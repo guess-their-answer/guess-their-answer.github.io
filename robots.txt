@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin
+Allow: /
+Sitemap: https://guess-their-answer.github.io/sitemap.xml
